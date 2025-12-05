@@ -16,8 +16,8 @@
 #include <assert.h>
 
 #define BUF_SIZE 16
-#define IFACE "ens3"   /* change to your NIC name */
-#define DISK  "sda"    /* change to your disk device */
+#define IFACE "ens3"
+#define DISK  "sda"
 #define SECTOR_SIZE 512
 
 static volatile int done = 0;
