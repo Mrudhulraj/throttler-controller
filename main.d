@@ -1,1 +1,1 @@
-main.o: main.c system.h
+main.o: main.c
