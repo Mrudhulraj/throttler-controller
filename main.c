@@ -168,7 +168,7 @@ void *consumer(void *arg) {
         pthread_cond_signal(&not_full);
         pthread_mutex_unlock(&lock);
 
-        printf("\rCPU: %.1f%% | Net RX: %.2f KB/s | TX: %.2f KB/s | Disk: %.2f KB/s",
+        printf("CPU: %.1f%% | Net RX: %.2f KB/s | TX: %.2f KB/s | Disk: %.2f KB/s",
                m.cpu_usage, m.rx_kbps, m.tx_kbps, m.disk_kbps);
         fflush(stdout);
 
