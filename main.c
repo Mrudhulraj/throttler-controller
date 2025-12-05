@@ -41,7 +41,7 @@ static void _signal_(int signum) {
     done = 1;
 }
 
-/* helper to read a single unsigned long from sysfs */
+/* helper to read a long from sysfs */
 unsigned long read_stat(const char *path) {
     FILE *f;
     unsigned long val = 0;
@@ -71,7 +71,9 @@ double get_cpu_usage(void) {
     nread = fscanf(f, "cpu %lu %lu %lu %lu", &user, &nice, &system, &idle);
     fclose(f);
 
-    if (nread != 4) return 0.0;
+    if (nread != 4){
+        return 0.0;
+    }
 
     diff_user   = user   - prev_user;
     diff_nice   = nice   - prev_nice;
@@ -102,7 +104,7 @@ void *producer(void *arg) {
 
     (void)arg;
 
-    /* Build sysfs paths with sprintf (safe: buffers are large enough) */
+    /* Build sysfs paths with sprintf */
     sprintf(path_rx, "/sys/class/net/%s/statistics/rx_bytes", IFACE);
     sprintf(path_tx, "/sys/class/net/%s/statistics/tx_bytes", IFACE);
     sprintf(path_stat, "/sys/block/%s/stat", DISK);
@@ -111,7 +113,7 @@ void *producer(void *arg) {
         rx_bytes = read_stat(path_rx);
         tx_bytes = read_stat(path_tx);
 
-        /* disk stats: read first two fields (rd_sectors, wr_sectors) */
+        /* disk stats: read first two fields */
         f = fopen(path_stat, "r");
         rd_sectors = wr_sectors = 0;
         if (f) {
@@ -133,7 +135,10 @@ void *producer(void *arg) {
         prev_wr = wr_sectors;
 
         pthread_mutex_lock(&lock);
-        while (count == BUF_SIZE) pthread_cond_wait(&not_full, &lock);
+        while (count == BUF_SIZE){
+            pthread_cond_wait(&not_full, &lock);
+        }
+
         buffer[tail].cpu_usage = get_cpu_usage();
         buffer[tail].rx_kbps = rx_rate;
         buffer[tail].tx_kbps = tx_rate;
@@ -152,7 +157,7 @@ void *producer(void *arg) {
 void *consumer(void *arg) {
     metrics_t m;
 
-    (void)arg;  /* silence unused warning */
+    (void)arg;
 
     while (!done) {
         pthread_mutex_lock(&lock);
@@ -180,7 +185,11 @@ void *consumer(void *arg) {
 int main(void) {
     pthread_t prod, cons;
 
-    if (SIG_ERR == signal(SIGINT, _signal_)) { perror("signal"); return -1; }
+    if (SIG_ERR == signal(SIGINT, _signal_)) 
+    { 
+        perror("signal");
+        return -1; 
+    }
 
     pthread_create(&prod, NULL, producer, NULL);
     pthread_create(&cons, NULL, consumer, NULL);
