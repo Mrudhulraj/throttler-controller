@@ -15,7 +15,7 @@
 #include <signal.h>
 #include <assert.h>
 
-#define BUF_SIZE 16
+#define BUF_SIZE 8
 #define IFACE "ens3"
 #define DISK  "sda"
 #define SECTOR_SIZE 512
