@@ -1,12 +1,3 @@
-/**
- * Tony Givargis
- * Copyright (C), 2023-2025
- * University of California, Irvine
- *
- * CS 238P - Operating Systems
- * main.c
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -91,7 +82,7 @@ double get_cpu_usage(void) {
     return usage;
 }
 
-/* Producer: network + disk */
+/* Producer network + disk */
 void *producer(void *arg) {
     static unsigned long prev_rx=0, prev_tx=0;
     static unsigned long prev_rd=0, prev_wr=0;

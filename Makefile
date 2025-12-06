@@ -1,16 +1,7 @@
-#
-# Tony Givargis
-# Copyright (C), 2023-2025
-# University of California, Irvine
-#
-# CS 238P - Operating Systems
-# Makefile
-#
-
 CC     = gcc
 CFLAGS = -ansi -pedantic -Wall -Wextra -Werror -Wfatal-errors -fpic -O3
 LDLIBS = -lpthread
-DEST   = cs238
+DEST   = throttler
 SRCS  := $(wildcard *.c)
 OBJS  := $(SRCS:.c=.o)
 
